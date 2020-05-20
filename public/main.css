@@ -1,0 +1,58 @@
+body {
+  font: 14px "Century Gothic", Futura, sans-serif;
+  margin: 20px;
+}
+
+.form-row {
+    display: flex;
+}
+
+.form-row p {
+    margin: 10px;
+}
+
+.form-players {
+    display: flex;
+}
+
+.player-buttons {
+    display: flex;
+    flex-direction: column;
+}
+
+.scoreboard {
+    table-layout: fixed;
+    border-collapse: collapse;
+    border: 3px solid black;
+    width: 80%;
+}
+
+.scoreboard thead{
+    border-bottom: 1px solid black;
+}
+
+.main {
+}
+
+.round {
+    margin: 25px;
+}
+
+.round h2 {
+    text-align: center;
+}
+
+.matches {
+    display: flex;
+    flex-direction: row;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.buttons button {
+    margin-left: 10px;
+}
