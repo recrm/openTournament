@@ -4,6 +4,7 @@ import { PlayerEntry } from "./components/PlayerEntry";
 import { player, restorePlayer } from "./components/Player";
 import { Matches } from "./components/Matches";
 import { ScoreBoard } from "./components/ScoreBoard";
+import { Timer } from "./components/Timer";
 import ls from "local-storage";
 
 let by_player = player(-1);
@@ -171,15 +172,17 @@ class Wrapper extends React.Component {
     }
 
     render() {
+        let page;
+
         if (this.state.page === "enter") {
-            return (
+            page = (
                 <div>
                     <button onClick={() => this.onChangePage("players")}>New Event</button>
                     <button onClick={this.onReloadState.bind(this)}>Reload Previous Data</button>
                 </div>
             )
         } else if (this.state.page === "players") {
-            return <PlayerEntry
+            page = <PlayerEntry
                        start={() => this.onChangePage("matches")}
                        players={this.state.players}
                        matches={this.state.rounds}
@@ -198,7 +201,7 @@ class Wrapper extends React.Component {
                                                            tie={this.state.tie}
                                                         />);
 
-            return (
+            page = (
                 <div className="main">
                     <div>
                         <div className="buttons">
@@ -220,6 +223,13 @@ class Wrapper extends React.Component {
                 </div>
             )
         }
+
+        return (
+            <div>
+                {page}
+                <Timer />
+            </div>
+        )
     }
 }
 

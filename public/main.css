@@ -56,3 +56,27 @@ body {
 .buttons button {
     margin-left: 10px;
 }
+
+.timer {
+    margin-top: 15px;
+    width: 200px;
+    border: 1px solid black;
+    text-align: center;
+}
+
+.timer-off {
+    font-size: 20px;
+    color: red;
+}
+
+.timer-on{
+    font-size: 20px;
+}
+
+.timer input {
+    width: 40px;
+}
+
+.timer-controls {
+    margin: 10px;
+}
