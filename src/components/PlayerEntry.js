@@ -13,28 +13,42 @@ export const PlayerEntry = (props) => {
     });
 
     return (
-        <div className="form-players">
-            <form>
-                <table>
-                    <thead>
-                        <tr>
-                            <td>name</td>
-                            <td>city</td>
-                            <td>character</td>
-                            <td>seed</td>
-                        </tr>
-                    </thead>
+        <div>
+            <h1>Player Entry</h1>
+            <div >
+                <div className="buttons">
+                    <button
+                        disabled={props.players.length >= 128}
+                        onClick={props.player_add}>Add New Player</button>
+                    <button
+                        disabled={props.matches.length > 0 || props.players.length <= 1}
+                        onClick={props.player_remove}>Remove Player</button>
+                    <input
+                        disabled={props.matches.length > 0}
+                        value={props.players.length}
+                        onChange={props.player_set}
+                        className="num-players"
+                        size="1"
+                        />
+                </div>
 
-                    <tbody>
-                        {rows}
-                    </tbody>
-                </table>
-            </form>
-            <div className="player-buttons">
-                <button onClick={props.player_add}>Add New Player</button>
-                <button disabled={props.matches.length > 0} onClick={props.player_remove}>Remove Player</button>
-                <button onClick={props.start}>Matches</button>
-                <input disabled={props.matches.length > 0} value={props.players.length} onChange={props.player_set} />
+                <form className="form-players">
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>name</td>
+                                <td>city</td>
+                                <td>character</td>
+                                <td>seed</td>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {rows}
+                        </tbody>
+                    </table>
+                </form>
+
             </div>
         </div>
     );

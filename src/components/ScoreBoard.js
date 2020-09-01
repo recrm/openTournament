@@ -16,19 +16,22 @@ export const ScoreBoard = (props) => {
         });
 
     return (
-        <table className="scoreboard">
-            <thead>
-                <tr>
-                    <td>name</td>
-                    <td>result</td>
-                    <td>sos</td>
-                    <td>city</td>
-                    <td>character</td>
-                </tr>
-            </thead>
-            <tbody>
-                {rows}
-            </tbody>
-        </table>
+        <div>
+            <h1>Scores</h1>
+            <table className="scoreboard">
+                <thead>
+                    <tr>
+                        <td>name</td>
+                        <td>result</td>
+                        <td>sos</td>
+                        <td>city</td>
+                        <td>character</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {rows}
+                </tbody>
+            </table>
+        </div>
     );
 }

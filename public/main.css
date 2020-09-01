@@ -3,6 +3,11 @@ body {
   margin: 20px;
 }
 
+textarea {
+    width: 100%;
+    height: 300px;
+}
+
 .form-row {
     display: flex;
 }
@@ -11,27 +16,43 @@ body {
     margin: 10px;
 }
 
-.form-players {
-    display: flex;
-}
-
 .player-buttons {
     display: flex;
     flex-direction: column;
+}
+
+.attribution {
+    font-size: 10px;
+    text-align: center;
 }
 
 .scoreboard {
     table-layout: fixed;
     border-collapse: collapse;
     border: 3px solid black;
-    width: 80%;
+    width: 100%;
+}
+
+.form-players {
+    margin-top: 15px;
 }
 
 .scoreboard thead{
     border-bottom: 1px solid black;
 }
 
-.main {
+.logo {
+    width: 150px;
+    height: 99px;
+}
+
+.header {
+    border: 1px solid black;
+    margin-bottom: 15px;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .round {
@@ -39,44 +60,57 @@ body {
 }
 
 .round h2 {
+    margin:0;
     text-align: center;
 }
 
 .matches {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    border: 3px solid black;
 }
 
 .buttons {
     display: flex;
     flex-direction: row;
     align-items: center;
+    margin-bottom: 15px;
 }
 
-.buttons button {
+.buttons * {
     margin-left: 10px;
 }
 
 .timer {
-    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
     width: 200px;
-    border: 1px solid black;
     text-align: center;
+    border-left: 1px solid black;
+    font-size: 20px;
+    margin: 0;
 }
 
 .timer-off {
-    font-size: 20px;
     color: red;
 }
 
-.timer-on{
-    font-size: 20px;
+.timer-on {
+    color: black;
+}
+
+.timer h3 {
+    margin: 0;
 }
 
 .timer input {
+    margin-top: 5px;
     width: 40px;
 }
 
-.timer-controls {
-    margin: 10px;
+.timer-controls button {
+    margin-top: 5px;
 }

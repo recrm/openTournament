@@ -2,26 +2,31 @@ import React from "react";
 import { render } from "react-dom";
 import { PlayerEntry } from "./components/PlayerEntry";
 import { player, restorePlayer } from "./components/Player";
-import { Matches } from "./components/Matches";
+import { MatchesManager } from "./components/Matches";
+import { DataManager, DataOutput, save_local } from "./components/Data";
+import { Navigation } from "./components/Navigation"
 import { ScoreBoard } from "./components/ScoreBoard";
-import { Timer } from "./components/Timer";
-import ls from "local-storage";
 
 let by_player = player(-1);
 by_player.name = "BY";
 
+const win = 3;
+const tie = 1;
+const lose = 0;
+
 class Wrapper extends React.Component {
 
     state = {
-        win: 3,
-        lose: 0,
-        tie: 1,
         page: "enter",
         players: [],
         rounds: [],
     }
 
     onSetPlayer(value, update) {
+        if (value > 128) {
+            value = 128
+        }
+
         while (value > this.state.players.length) {
             this.onNewPlayer(update);
         }
@@ -128,13 +133,13 @@ class Wrapper extends React.Component {
 
         if (round_winner === "tie") {
             current_match.forEach((player) => {
-                player.score = this.state.tie;
+                player.score = tie;
             });
         } else {
             current_match.forEach((player) => {
                 player.score = player.player.key === parseInt(round_winner)
-                    ? this.state.win
-                    : this.state.lose;
+                    ? win
+                    : lose;
             });
         }
 
@@ -142,29 +147,27 @@ class Wrapper extends React.Component {
     }
 
     newState(obj) {
-        this.setState(obj, () => ls.set("ak-rc_games", JSON.stringify(this.state)));
+        this.setState(obj, () => save_local(this.state));
     }
 
-    onReloadState() {
-        let data = ls.get("ak-rc_games");
-        if (data !== null) {
-            let new_state = JSON.parse(data);
+    onReloadState(new_state) {
+        // Restore player objects
+        new_state.players.forEach(x => restorePlayer(x, () => this.onUpdatePlayer(this.state.players)));
 
-            // Restore player objects
-            new_state.players.forEach(x => restorePlayer(x, () => this.onUpdatePlayer(this.state.players)));
-
-            // Restore match objects
-            new_state.rounds.forEach(round => {
-                round.forEach(match => {
-                    match.forEach(player => {
-                        player.player = player.player.key === -1
-                            ? by_player
-                            : new_state.players[player.player.key];
-                    });
+        // Restore match objects
+        new_state.rounds.forEach(round => {
+            round.forEach(match => {
+                match.forEach(player => {
+                    player.player = player.player === -1
+                        ? by_player
+                        : new_state.players[player.player];
                 });
             });
-            this.newState(new_state);
-        }
+        });
+
+        new_state.page = "matches";
+
+        this.newState(new_state);
     }
 
     componentDidMount() {
@@ -174,16 +177,21 @@ class Wrapper extends React.Component {
     render() {
         let page;
 
-        if (this.state.page === "enter") {
-            page = (
-                <div>
-                    <button onClick={() => this.onChangePage("players")}>New Event</button>
-                    <button onClick={this.onReloadState.bind(this)}>Reload Previous Data</button>
-                </div>
-            )
+        if (this.state.page === "data") {
+            page = <DataOutput
+                       state={this.state}
+                   />
+        } else if (this.state.page === "scores") {
+            page = <ScoreBoard
+                       players={this.state.players}
+                       matches={this.state.rounds}
+                    />
+        } else if (this.state.page === "enter") {
+            page = <DataManager
+                       onReloadState={this.onReloadState.bind(this)}
+                   />
         } else if (this.state.page === "players") {
             page = <PlayerEntry
-                       start={() => this.onChangePage("matches")}
                        players={this.state.players}
                        matches={this.state.rounds}
                        player_add={() => this.onNewPlayer()}
@@ -192,42 +200,21 @@ class Wrapper extends React.Component {
                    />
 
         } else if (this.state.page === "matches") {
-            let matches = this.state.rounds.map((x, index) => <Matches
-                                                           onReport={this.onRoundReport.bind(this)}
-                                                           iden={index}
-                                                           matches={x}
-                                                           key={index}
-                                                           win={this.state.win}
-                                                           tie={this.state.tie}
-                                                        />);
-
-            page = (
-                <div className="main">
-                    <div>
-                        <div className="buttons">
-                            <h1>Matches</h1>
-                            <div>
-                                <button onClick={this.onNewRound.bind(this)}>New Round</button>
-                                <button onClick={this.onDeleteRound.bind(this)}>Delete Round</button>
-                                <button onClick={() => this.onChangePage("players")}>Edit people</button>
-                            </div>
-                        </div>
-                        <div className="matches">
-                            {matches}
-                        </div>
-                    </div>
-                    <div className="scores">
-                        <h1>Scores</h1>
-                        <ScoreBoard players={this.state.players} matches={this.state.rounds} />
-                    </div>
-                </div>
-            )
+            page = <MatchesManager
+                       win={win}
+                       tie={tie}
+                       rounds={this.state.rounds}
+                       players={this.state.players}
+                       onRoundReport={this.onRoundReport.bind(this)}
+                       onNewRound={this.onNewRound.bind(this)}
+                       onDeleteRound={this.onDeleteRound.bind(this)}
+                    />
         }
 
         return (
-            <div>
+            <div className="fill">
+                <Navigation onChangePage={this.onChangePage.bind(this)} />
                 {page}
-                <Timer />
             </div>
         )
     }

@@ -1,4 +1,5 @@
 import React from "react";
+import { ScoreBoard } from "./ScoreBoard";
 
 const Match = (props) => {
     return (
@@ -43,6 +44,7 @@ export const Matches = (props) => {
     return (
         <div className="round">
             <h2>Round {props.iden}</h2>
+            <hr />
             <table>
                 <tbody>
                     {matches}
@@ -50,4 +52,34 @@ export const Matches = (props) => {
             </table>
         </div>
     );
+}
+
+export const MatchesManager = (props) => {
+    let matches = props.rounds.map(
+        (x, index) => <Matches
+           onReport={props.onRoundReport.bind(this)}
+           iden={index}
+           matches={x}
+           key={index}
+           win={props.win}
+           tie={props.tie}
+        />
+    );
+
+    return (
+        <div>
+            <div>
+                <h1>Matches</h1>
+                <div className="buttons">
+                    <div>
+                        <button onClick={props.onNewRound.bind(this)}>New Round</button>
+                        <button onClick={props.onDeleteRound.bind(this)}>Delete Round</button>
+                    </div>
+                </div>
+                <div className="matches">
+                    {matches}
+                </div>
+            </div>
+        </div>
+    )
 }

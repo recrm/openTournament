@@ -108,7 +108,6 @@ export class Timer extends React.Component {
 
         return (
             <div className="timer">
-                <h3>Timer</h3>
                 <div className={name}>
                     {this.state.remaining_hours.toString().padStart(2,'0')}:{this.state.remaining_minutes.toString().padStart(2,'0')}:{this.state.remaining_seconds.toString().padStart(2,'0')}
                 </div>
