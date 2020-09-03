@@ -54,7 +54,7 @@ export class DataManager extends React.Component {
                 <h1>Load Data</h1>
                 <div className="buttons">
                     <button onClick={this.getNew.bind(this)}>New Event</button>
-                    <button onClick={this.getFromLocal.bind(this)}>Previous</button>
+                    <button onClick={this.getFromLocal.bind(this)}>Previous Event</button>
                     <button onClick={this.getFromText.bind(this)}>Import</button>
                 </div>
                 <div>
