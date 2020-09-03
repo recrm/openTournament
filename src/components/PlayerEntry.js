@@ -21,7 +21,7 @@ export const PlayerEntry = (props) => {
                     disabled={props.players.length >= 128}
                     onClick={() => onNewPlayer(props.players, props.rounds, props.newState)}>Add Player</button>
                 <button
-                    disabled={props.rounds.length > 0 || props.players.length <= 1}
+                    disabled={props.rounds.length > 0 || props.topcut_rounds.length > 0}
                     onClick={() => onDeletePlayer(props.players, props.topcuts, props.newState)}>Remove Player</button>
                 <input
                     disabled={props.rounds.length > 0}
@@ -72,7 +72,7 @@ function onSetPlayer(obj, players, rounds, topcuts, newState) {
 function onDeletePlayer(players, topcuts, newState) {
     let gone = players.pop();
 
-    if (topcuts.includes(gone.key)) {
+    if (gone && topcuts.includes(gone.key)) {
         topcuts = topcuts.filter(key => key !== gone.key);
     }
 

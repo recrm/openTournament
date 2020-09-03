@@ -117,6 +117,10 @@ function pairing(candidates, rounds) {
 }
 
 function onNewRound(players, rounds, newState) {
+    if (players.length === 0) {
+        return;
+    }
+
     let candidates = players
         .slice(0)
         .sort((a,b) => a.sort(b, players, rounds));

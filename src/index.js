@@ -59,6 +59,7 @@ class Wrapper extends React.Component {
                        players={this.state.players}
                        rounds={this.state.rounds}
                        topcuts={this.state.topcuts}
+                       topcut_rounds={this.state.topcut_rounds}
                        newState={newState}
                    />
         } else if (this.state.page === "matches") {
