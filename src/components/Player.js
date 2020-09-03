@@ -83,13 +83,11 @@ export function player (key, update) {
         character: "",
         seed: randint(0, 100),
         key: key,
-        update: update,
-        handleChange: (...a) => handleChange(self, ...a),
-        score: (...a) => score(self, ...a),
-        opponents: (...a) => opponents(self, ...a),
-        sos: (...a) => sos(self, ...a),
-        sort: (...a) => sort(self, ...a),
     }
 
+    restorePlayer(self, update);
     return self;
 }
+
+export const by_player = player(-1)
+by_player.name = "BY"
