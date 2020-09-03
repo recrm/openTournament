@@ -25,6 +25,7 @@ class Wrapper extends React.Component {
         try {
             let data = load_local(this.newState.bind(this));
             if (data != null) {
+                delete data.name;
                 this.newState(data);
                 this.newState({page: "enter"});
                 return;
