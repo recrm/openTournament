@@ -24,7 +24,7 @@ export const PlayerEntry = (props) => {
                     disabled={props.rounds.length > 0 || props.topcut_rounds.length > 0}
                     onClick={() => onDeletePlayer(props.players, props.topcuts, props.newState)}>Remove Player</button>
                 <input
-                    disabled={props.rounds.length > 0}
+                    disabled={props.rounds.length > 0 || props.topcut_rounds.length > 0}
                     value={props.players.length}
                     onChange={(value) => onSetPlayer(value, props.players, props.rounds, props.topcuts, props.newState)}
                     className="num-players"
