@@ -1,5 +1,6 @@
 import React from "react";
-import { Round, onRoundReport, onDeleteRound } from "./Matches"
+import { Round, onRoundReport, onDeleteRound, win, lose } from "./Matches"
+import { by_player } from "./Player"
 
 export class TopCuts extends React.Component {
     state = {
@@ -16,28 +17,31 @@ export class TopCuts extends React.Component {
                 return result;
             }, [])
             .map(x => {
+                let p1 = x[0] !== -1 ? this.props.players[x[0]] : by_player;
+                let p2 = x[1] !== -1 ? this.props.players[x[1]] : by_player;
+
                 return [
-                    {
-                        player: this.props.players[x[0]],
-                        score: 0
-                    },
-                    {
-                        player: this.props.players[x[1]],
-                        score: 0
-                    }
+                    {player: p1, score: p2.key === -1 ? win : lose},
+                    {player: p2, core: p1.key === -1 ? win : lose}
                 ]
             });
     }
 
-    checkPowerOfTwo(x) {
-        while (x > 2) {
-            x = x / 2;
+    firstRoundPairings(topcuts) {
+        // Pad player count to an exponent of 16
+
+        let cuts = topcuts.slice();
+
+        let i = 1;
+        while (Math.pow(2, i) < cuts.length) {
+            i += 1;
         }
 
-        return x === 2
-    }
+        while (cuts.length < Math.pow(2, i)) {
+            cuts.push(-1);
+        }
 
-    firstRoundPairings(cuts) {
+        // Sort players into matches
         let new_cuts = cuts.reduce((result, value, index, array) => {
             if (index < array.length / 2) {
                 result.push([array[index], array[array.length - index - 1]]);
@@ -58,11 +62,10 @@ export class TopCuts extends React.Component {
 
     onNextRound() {
         if (this.props.topcut_rounds.length === 0) {
-            if (this.checkPowerOfTwo(this.props.topcuts.length)) {
-                this.props.newState({topcut_rounds: [this.newRound(this.firstRoundPairings(this.props.topcuts))]});
-            } else {
-                this.setState({error: "Number of selected players must be a power of 2."})
-            }
+            this.props.newState({
+                topcut_rounds: [this.newRound(this.firstRoundPairings(this.props.topcuts))]
+            });
+
         } else {
             let next = this.props.topcut_rounds[this.props.topcut_rounds.length - 1]
                 .map(x => {

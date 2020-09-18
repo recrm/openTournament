@@ -1,9 +1,9 @@
 import React from "react";
 import { by_player } from "./Player";
 
-const win = 3;
-const tie = 1;
-const lose = 0;
+export const win = 3;
+export const tie = 1;
+export const lose = 0;
 
 const Match = (props) => {
     return (
@@ -48,7 +48,7 @@ export const Round = (props) => {
 
     return (
         <div className="round">
-            <h2>Round {props.iden}</h2>
+            <h2>Round {props.iden + 1}</h2>
             <hr />
             <table>
                 <tbody>
@@ -108,8 +108,8 @@ function pairing(candidates, rounds) {
             let matches = pairing(spliced, rounds);
             if (matches !== undefined) {
                 matches.push([
-                    {score: 0, player: node},
-                    {score: 0, player: child},
+                    {score: child.key === -1 ? win : lose, player: node},
+                    {score: node.key === -1 ? win : lose, player: child},
                 ]);
             }
             return matches;
