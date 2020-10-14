@@ -172,7 +172,7 @@ export class MatchesManager extends React.Component {
 
         if (this.state.custom) {
             matches.push(
-                <CustomRound iden={10} key={"custom"} players={this.props.players} newState={this.props.newState}
+                <CustomRound iden={this.props.rounds.length} key={"custom"} players={this.props.players} newState={this.props.newState}
                              rounds={this.props.rounds} upperState={this.setState.bind(this)} />
             );
         }
@@ -182,7 +182,7 @@ export class MatchesManager extends React.Component {
                 <h1>Swiss Matches</h1>
                 <div className="buttons">
                     <button onClick={() => onNewRound(this.props.players, this.props.rounds, this.props.newState)}>New Round</button>
-                    <button onClick={() => this.setState({custom: true})}>Custom Round</button>
+                    <button onClick={() => this.setState({custom: !this.state.custom})}>Custom Round</button>
                     <button onClick={() => onDeleteRound(this.props.rounds, this.props.newState, "rounds")}>Delete Round</button>
                 </div>
                 <div className="wrapper">
