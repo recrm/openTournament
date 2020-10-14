@@ -1,6 +1,7 @@
 import React from "react";
 import { player, by_player } from "./Player";
 
+// TODO: Add ability to drop players. Talk to steve about exact way to do this.
 export const PlayerEntry = (props) => {
     let rows = props.players.map((player, i) => {
         return (

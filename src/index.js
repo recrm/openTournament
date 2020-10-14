@@ -7,6 +7,7 @@ import { Navigation } from "./components/Navigation"
 import { ScoreBoard } from "./components/ScoreBoard";
 import { TopCut } from "./components/TopCut";
 
+// TODO: Add google analytics
 // import ReactGA from 'react-ga';
 //
 // const trackingId = "UA-21714436-2"; // Replace with your Google Analytics tracking ID
@@ -87,6 +88,7 @@ class Wrapper extends React.Component {
                 {page}
             </div>
         )
+        // TODO: add ability to add cards.
     }
 }
 
