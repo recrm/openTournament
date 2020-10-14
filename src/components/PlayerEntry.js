@@ -22,11 +22,11 @@ export const PlayerEntry = (props) => {
                     onClick={() => onNewPlayer(props.players, props.rounds, props.newState)}>Add Player</button>
                 <button
                     disabled={props.rounds.length > 0 || props.topcut_rounds.length > 0}
-                    onClick={() => onDeletePlayer(props.players, props.topcuts, props.newState)}>Remove Player</button>
+                    onClick={() => onDeletePlayer(props.players, props.topcut, props.newState)}>Remove Player</button>
                 <input
                     disabled={props.rounds.length > 0 || props.topcut_rounds.length > 0}
                     value={props.players.length}
-                    onChange={(value) => onSetPlayer(value, props.players, props.rounds, props.topcuts, props.newState)}
+                    onChange={(value) => onSetPlayer(value, props.players, props.rounds, props.topcut, props.newState)}
                     className="num-players"
                     size="1"
                     />
@@ -54,7 +54,7 @@ export const PlayerEntry = (props) => {
     );
 }
 
-function onSetPlayer(obj, players, rounds, topcuts, newState) {
+function onSetPlayer(obj, players, rounds, topcut, newState) {
     let value = obj.target.value;
     if (value > 128) {
         value = 128
@@ -65,18 +65,18 @@ function onSetPlayer(obj, players, rounds, topcuts, newState) {
     }
 
     while (value < players.length) {
-        onDeletePlayer(players, topcuts, newState);
+        onDeletePlayer(players, topcut, newState);
     }
 }
 
-function onDeletePlayer(players, topcuts, newState) {
+function onDeletePlayer(players, topcut, newState) {
     let gone = players.pop();
 
-    if (gone && topcuts.includes(gone.key)) {
-        topcuts = topcuts.filter(key => key !== gone.key);
+    if (gone && topcut.includes(gone.key)) {
+        topcut = topcut.filter(key => key !== gone.key);
     }
 
-    newState({players, topcuts});
+    newState({players, topcut});
 }
 
 function onNewPlayer(players, rounds, newState) {
@@ -88,7 +88,7 @@ function onNewPlayer(players, rounds, newState) {
     players.push(new_player);
 
     // Add player into any existing rounds
-    rounds.forEach((current, index, array) => {
+    rounds.forEach((current) => {
         current.push([
             {score: 0, player: new_player},
             {score: 0, player: by_player}

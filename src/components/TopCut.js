@@ -2,7 +2,7 @@ import React from "react";
 import { Round, onRoundReport, onDeleteRound, win, lose } from "./Matches"
 import { by_player } from "./Player"
 
-export class TopCuts extends React.Component {
+export class TopCut extends React.Component {
     state = {
         error: ""
     }
@@ -27,10 +27,10 @@ export class TopCuts extends React.Component {
             });
     }
 
-    firstRoundPairings(topcuts) {
+    firstRoundPairings(topcut) {
         // Pad player count to an exponent of 16
 
-        let cuts = topcuts.slice();
+        let cuts = topcut.slice();
 
         let i = 1;
         while (Math.pow(2, i) < cuts.length) {
@@ -63,7 +63,7 @@ export class TopCuts extends React.Component {
     onNextRound() {
         if (this.props.topcut_rounds.length === 0) {
             this.props.newState({
-                topcut_rounds: [this.newRound(this.firstRoundPairings(this.props.topcuts))]
+                topcut_rounds: [this.newRound(this.firstRoundPairings(this.props.topcut))]
             });
 
         } else {

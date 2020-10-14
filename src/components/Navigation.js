@@ -13,7 +13,7 @@ export const Navigation = (props) => {
                 </div>
                 <div className="buttons">
                     <button onClick={() => props.newState({page: "scores"})}>Scores</button>
-                    <button onClick={() => props.newState({page: "topcuts"})}>Elimination</button>
+                    <button onClick={() => props.newState({page: "topcut"})}>Elimination</button>
                     <button onClick={() => props.newState({page: "enter"})}>Load</button>
                 </div>
             </div>

@@ -5,7 +5,12 @@ import { MatchesManager } from "./components/Matches";
 import { DataManager, DataOutput, save_local, load_local, new_local } from "./components/Data";
 import { Navigation } from "./components/Navigation"
 import { ScoreBoard } from "./components/ScoreBoard";
-import { TopCuts } from "./components/TopCuts";
+import { TopCut } from "./components/TopCut";
+
+import ReactGA from 'react-ga';
+
+const trackingId = "UA-21714436-2"; // Replace with your Google Analytics tracking ID
+ReactGA.initialize(trackingId);
 
 class Wrapper extends React.Component {
 
@@ -13,7 +18,7 @@ class Wrapper extends React.Component {
         page: "enter",
         players: [],
         rounds: [],
-        topcuts: [],
+        topcut: [],
         topcut_rounds: [],
     }
 
@@ -47,7 +52,7 @@ class Wrapper extends React.Component {
             page = <ScoreBoard
                        players={this.state.players}
                        rounds={this.state.rounds}
-                       topcuts={this.state.topcuts}
+                       topcut={this.state.topcut}
                        newState={newState}
                     />
         } else if (this.state.page === "enter") {
@@ -58,7 +63,7 @@ class Wrapper extends React.Component {
             page = <PlayerEntry
                        players={this.state.players}
                        rounds={this.state.rounds}
-                       topcuts={this.state.topcuts}
+                       topcut={this.state.topcut}
                        topcut_rounds={this.state.topcut_rounds}
                        newState={newState}
                    />
@@ -68,10 +73,10 @@ class Wrapper extends React.Component {
                        rounds={this.state.rounds}
                        newState={newState}
                     />
-        } else if (this.state.page === "topcuts") {
-            page = <TopCuts
+        } else if (this.state.page === "topcut") {
+            page = <TopCut
                        players={this.state.players}
-                       topcuts={this.state.topcuts}
+                       topcut={this.state.topcut}
                        topcut_rounds={this.state.topcut_rounds}
                        newState={newState}
                     />

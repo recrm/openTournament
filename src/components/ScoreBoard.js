@@ -7,15 +7,15 @@ export class ScoreBoard extends React.Component {
     }
 
     onAddPlayer(player) {
-        if (!this.props.topcuts.includes(player.key)) {
-            this.props.newState({topcuts: [...this.props.topcuts, player.key]});
+        if (!this.props.topcut.includes(player.key)) {
+            this.props.newState({topcut: [...this.props.topcut, player.key]});
         }
     }
 
     onRemovePlayer(player) {
-        if (this.props.topcuts.includes(player.key)) {
-            let filtered = this.props.topcuts.filter(key => key !== player.key);
-            this.props.newState({topcuts: filtered});
+        if (this.props.topcut.includes(player.key)) {
+            let filtered = this.props.topcut.filter(key => key !== player.key);
+            this.props.newState({topcut: filtered});
         }
     }
 
@@ -23,7 +23,7 @@ export class ScoreBoard extends React.Component {
         let rows = this.props.players.slice(0)
             .sort((a,b) => {return a.sort(b, this.props.players, this.props.rounds)});
         let new_keys = rows.slice(0, this.state.auto_add).map(player => player.key);
-        this.props.newState({topcuts: new_keys});
+        this.props.newState({topcut: new_keys});
     }
 
     build_row(player) {
@@ -52,11 +52,11 @@ export class ScoreBoard extends React.Component {
             .sort((a,b) => {return a.sort(b, this.props.players, this.props.rounds)});
 
         let added = rows
-            .filter(player => this.props.topcuts.includes(player.key))
+            .filter(player => this.props.topcut.includes(player.key))
             .map(this.build_row.bind(this));
 
         let extra = rows
-            .filter(player => !this.props.topcuts.includes(player.key))
+            .filter(player => !this.props.topcut.includes(player.key))
             .map(this.build_row.bind(this));
 
 
@@ -64,10 +64,10 @@ export class ScoreBoard extends React.Component {
             <div>
                 <h1>Scores</h1>
                 <div className="buttons">
-                    <button onClick={() => this.props.newState({topcuts: []})}>Reset</button>
+                    <button onClick={() => this.props.newState({topcut: []})}>Reset</button>
                     <button onClick={this.onBulkAdd.bind(this)}>Auto Add</button>
                     <input value={this.state.auto_add} onChange={this.onAutoAddChange.bind(this)} />
-                    <input value={this.props.topcuts.length} readOnly />
+                    <input value={this.props.topcut.length} readOnly />
                 </div>
 
                 <div className="wrapper">
@@ -86,7 +86,7 @@ export class ScoreBoard extends React.Component {
                         </thead>
                         <tbody>
                             {added}
-                            <tr className="seperator" />
+                            <tr className="separator" />
                             {extra}
                         </tbody>
                     </table>

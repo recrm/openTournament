@@ -2,12 +2,13 @@ import React from "react";
 import ls from "local-storage";
 import { restorePlayer, by_player } from "./Player";
 
+
 export const DataOutput = (props) => {
     let data = JSON.stringify(compress(props.state), undefined, 4);
     return (
         <div>
             <h1>Export Data</h1>
-            <textarea value={data} readOnly></textarea>
+            <textarea value={data} readOnly />
         </div>
     );
 }
@@ -58,7 +59,7 @@ export class DataManager extends React.Component {
                     <button onClick={this.getFromText.bind(this)}>Import</button>
                 </div>
                 <div>
-                    <textarea onChange={this.onChangeData.bind(this)}></textarea>
+                    <textarea onChange={this.onChangeData.bind(this)} />
                     <p className="error">{this.state.error}</p>
                 </div>
             </div>
@@ -120,11 +121,10 @@ export function load_local(newState) {
 }
 
 export function new_local() {
-    let data = {
+    return {
         players: [],
         rounds: [],
-        topcuts: [],
+        topcut: [],
         topcut_rounds: [],
     };
-    return data;
 }

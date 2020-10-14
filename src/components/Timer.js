@@ -2,14 +2,14 @@ import React from "react";
 
 (function() {
   window.accurateInterval = function(time, fn) {
-    var cancel, nextAt, timeout, wrapper, _ref;
+    let cancel, nextAt, timeout, wrapper, _ref;
     nextAt = new Date().getTime() + time;
     timeout = null;
     if (typeof time === 'function') {
         _ref = [time, fn];
         fn = _ref[0];
         time = _ref[1];
-    };
+    }
 
     wrapper = function() {
       nextAt += time;
