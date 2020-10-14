@@ -7,10 +7,10 @@ import { Navigation } from "./components/Navigation"
 import { ScoreBoard } from "./components/ScoreBoard";
 import { TopCut } from "./components/TopCut";
 
-import ReactGA from 'react-ga';
-
-const trackingId = "UA-21714436-2"; // Replace with your Google Analytics tracking ID
-ReactGA.initialize(trackingId);
+// import ReactGA from 'react-ga';
+//
+// const trackingId = "UA-21714436-2"; // Replace with your Google Analytics tracking ID
+// ReactGA.initialize(trackingId);
 
 class Wrapper extends React.Component {
 

@@ -59,31 +59,149 @@ export const Round = (props) => {
     );
 }
 
-export const MatchesManager = (props) => {
-    let matches = props.rounds.map(
-        (x, index) => <Round
-            hidetie={false}
-            onReport={(event) => onRoundReport(event, props.rounds, props.newState, "rounds")}
-            iden={index}
-            matches={x}
-            key={index}
-        />
-    );
+export class CustomRound extends React.Component {
 
-    return (
-        <div>
-            <h1>Swiss Matches</h1>
-            <div className="buttons">
-                <button onClick={() => onNewRound(props.players, props.rounds, props.newState)}>New Round</button>
-                <button onClick={() => onDeleteRound(props.rounds, props.newState, "rounds")}>Delete Round</button>
+    state = {
+        one: -1,
+        two: -1,
+        set: [],
+        matches: [],
+    }
+
+    onChangeSelection(event) {
+        if (event.target.id === "1") {
+            this.setState({one: parseInt(event.target.value)});
+        } else if (event.target.id === "2") {
+            this.setState({two: parseInt(event.target.value)});
+        }
+    }
+
+    onNextRound() {
+        if (this.state.one !== this.state.two) {
+            let player1 = this.state.one !== -1 ? this.props.players[this.state.one] : by_player;
+            let player2 = this.state.two !== -1 ? this.props.players[this.state.two] : by_player;
+            this.setState({
+                matches: this.state.matches.concat([newMatch(player1, player2)]),
+                set: this.state.set.concat([this.state.one, this.state.two]),
+                one: -1,
+                two: -1,
+            });
+        }
+    }
+
+    onEndCustomRound() {
+        this.props.newState({rounds: this.props.rounds.concat([this.state.matches])});
+        this.setState({set: [], matches: []});
+        this.props.upperState({custom: false, error: ""});
+    }
+
+    onAutoCustomRound() {
+        let candidates = this.props.players.filter(x => !this.state.set.includes(x.key));
+        let matches = pairing(candidates, this.props.rounds);
+
+        let new_round;
+
+        if (matches !== undefined) {
+            matches.reverse();
+            new_round = this.state.matches.concat(matches);
+            this.props.newState({rounds: this.props.rounds.concat([new_round])});
+            this.setState({set: [], matches: []});
+            this.props.upperState({custom: false, error: ""});
+        } else {
+            this.props.upperState({error: "Could not finish round without duplicate pairings. Please finish it manually."})
+        }
+    }
+
+    render() {
+
+        let players = [by_player]
+            .concat(this.props.players.filter(x => !this.state.set.includes(x.key)))
+            .map(x => <option key={x.key} label={x.name}>{x.key}</option>);
+
+        let matches = this.state.matches
+            .map((x, index) => (<tr key={{index}}><td>{x[0].player.name}</td><td>{x[1].player.name}</td></tr>));
+
+        return (
+            <div className="round">
+                <h2>Round {this.props.iden + 1}</h2>
+                <hr />
+                <table>
+                    <tbody>
+                        {matches}
+                        <tr>
+                            <td>
+                                <select id={1} value={this.state.one} onChange={this.onChangeSelection.bind(this)}>
+                                    {players}
+                                </select>
+                            </td>
+                            <td>
+                                <select id={2} value={this.state.two} onChange={this.onChangeSelection.bind(this)}>
+                                    {players}
+                                </select>
+                            </td>
+                            <td><button onClick={this.onNextRound.bind(this)}>Save</button></td>
+                        </tr>
+                        <tr>
+                            <td><button onClick={this.onEndCustomRound.bind(this)}>Finish</button></td>
+                            <td><button onClick={this.onAutoCustomRound.bind(this)}>Auto</button></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <div className="wrapper">
-                <div className="matches">
-                    {matches}
+        )
+    }
+}
+
+export class MatchesManager extends React.Component {
+
+    state = {
+        custom: false,
+        error: "",
+    }
+
+    render() {
+        let matches = this.props.rounds.map(
+            (x, index) => <Round
+                hidetie={false}
+                onReport={(event) => onRoundReport(event, this.props.rounds, this.props.newState, "rounds")}
+                iden={index}
+                matches={x}
+                key={index}
+            />
+        );
+
+        if (this.state.custom) {
+            matches.push(
+                <CustomRound iden={10} key={"custom"} players={this.props.players} newState={this.props.newState}
+                             rounds={this.props.rounds} upperState={this.setState.bind(this)} />
+            );
+        }
+
+        return (
+            <div>
+                <h1>Swiss Matches</h1>
+                <div className="buttons">
+                    <button onClick={() => onNewRound(this.props.players, this.props.rounds, this.props.newState)}>New Round</button>
+                    <button onClick={() => this.setState({custom: true})}>Custom Round</button>
+                    <button onClick={() => onDeleteRound(this.props.rounds, this.props.newState, "rounds")}>Delete Round</button>
                 </div>
+                <div className="wrapper">
+                    <div className="matches">
+                        {matches}
+                    </div>
+                </div>
+                <p className="error">{this.state.error}</p>
             </div>
-        </div>
-    )
+        )
+    }
+
+}
+
+function newMatch(player1, player2) {
+    return [
+        {score: player2.key === -1 ? win : lose, player: player1},
+        {score: player1.key === -1 ? win : lose, player: player2},
+    ]
 }
 
 function pairing(candidates, rounds) {
@@ -107,10 +225,7 @@ function pairing(candidates, rounds) {
 
             let matches = pairing(spliced, rounds);
             if (matches !== undefined) {
-                matches.push([
-                    {score: child.key === -1 ? win : lose, player: node},
-                    {score: node.key === -1 ? win : lose, player: child},
-                ]);
+                matches.push(newMatch(child, node));
             }
             return matches;
         }, undefined);
