@@ -86,6 +86,7 @@ export class CustomRound extends React.Component {
                 one: -1,
                 two: -1,
             });
+            this.props.upperState({error: ""})
         }
     }
 
@@ -119,7 +120,7 @@ export class CustomRound extends React.Component {
             .map(x => <option key={x.key} label={x.name}>{x.key}</option>);
 
         let matches = this.state.matches
-            .map((x, index) => (<tr key={{index}}><td>{x[0].player.name}</td><td>{x[1].player.name}</td></tr>));
+            .map((x, index) => (<tr key={index}><td>{x[0].player.name}</td><td>{x[1].player.name}</td></tr>));
 
         return (
             <div className="round">
@@ -182,7 +183,7 @@ export class MatchesManager extends React.Component {
                 <h1>Swiss Matches</h1>
                 <div className="buttons">
                     <button onClick={() => onNewRound(this.props.players, this.props.rounds, this.props.newState)}>New Round</button>
-                    <button onClick={() => this.setState({custom: !this.state.custom})}>Custom Round</button>
+                    <button onClick={() => this.setState({custom: !this.state.custom, error: ""})}>Custom Round</button>
                     <button onClick={() => onDeleteRound(this.props.rounds, this.props.newState, "rounds")}>Delete Round</button>
                 </div>
                 <div className="wrapper">
@@ -205,6 +206,9 @@ function newMatch(player1, player2) {
 }
 
 function pairing(candidates, rounds) {
+    if (candidates.length % 2 === 1) {
+        candidates.push(by_player);
+    }
 
     if (candidates.length === 0) {
         return [];
@@ -239,10 +243,6 @@ function onNewRound(players, rounds, newState) {
     let candidates = players
         .slice(0)
         .sort((a,b) => a.sort(b, players, rounds));
-
-    if (candidates.length % 2 === 1) {
-        candidates.push(by_player);
-    }
 
     let matches = pairing(candidates.slice(0), rounds);
 

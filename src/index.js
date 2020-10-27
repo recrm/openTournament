@@ -8,10 +8,12 @@ import { ScoreBoard } from "./components/ScoreBoard";
 import { TopCut } from "./components/TopCut";
 
 // TODO: Add google analytics
-// import ReactGA from 'react-ga';
-//
-// const trackingId = "UA-21714436-2"; // Replace with your Google Analytics tracking ID
-// ReactGA.initialize(trackingId);
+import ReactGA from 'react-ga';
+const trackingId = "UA-21714436-2"; // Replace with your Google Analytics tracking ID
+ReactGA.initialize(
+    
+    trackingId
+);
 
 class Wrapper extends React.Component {
 
@@ -28,6 +30,7 @@ class Wrapper extends React.Component {
     }
 
     componentDidMount() {
+
         try {
             let data = load_local(this.newState.bind(this));
             if (data != null) {
@@ -42,14 +45,18 @@ class Wrapper extends React.Component {
     }
 
     render() {
+
+
         let page;
         let newState = this.newState.bind(this);
 
         if (this.state.page === "data") {
+            ReactGA.pageview("data_export");
             page = <DataOutput
                        state={this.state}
                    />
         } else if (this.state.page === "scores") {
+            ReactGA.pageview("scores");
             page = <ScoreBoard
                        players={this.state.players}
                        rounds={this.state.rounds}
@@ -57,10 +64,12 @@ class Wrapper extends React.Component {
                        newState={newState}
                     />
         } else if (this.state.page === "enter") {
+            ReactGA.pageview("data_load");
             page = <DataManager
                        newState={newState}
                    />
         } else if (this.state.page === "players") {
+            ReactGA.pageview("player_entry");
             page = <PlayerEntry
                        players={this.state.players}
                        rounds={this.state.rounds}
@@ -69,12 +78,14 @@ class Wrapper extends React.Component {
                        newState={newState}
                    />
         } else if (this.state.page === "matches") {
+            ReactGA.pageview("swiss_matches");
             page = <MatchesManager
                        players={this.state.players}
                        rounds={this.state.rounds}
                        newState={newState}
                     />
         } else if (this.state.page === "topcut") {
+            ReactGA.pageview("elimination_matches");
             page = <TopCut
                        players={this.state.players}
                        topcut={this.state.topcut}
